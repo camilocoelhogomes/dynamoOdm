@@ -1,7 +1,12 @@
 import {DynamoMetadataInterface} from './DynamoMetadataInterface';
 
+export enum AttributeType {
+  String = 'S',
+  Number = 'N',
+}
+
 export interface AttributeConfig {
-  type: string;
+  type: AttributeType;
   columnName?: string;
 }
 
@@ -10,10 +15,23 @@ export function Attribute(config: AttributeConfig) {
     if (!context.metadata['dynamoEntityConfig']) {
       context.metadata['dynamoEntityConfig'] = {};
     }
-    (
-      context.metadata['dynamoEntityConfig'] as DynamoMetadataInterface
-    ).entityAttributes = {
-      [context.name]: config,
-    };
+    if (
+      !(context.metadata['dynamoEntityConfig'] as DynamoMetadataInterface)
+        .entityAttributes
+    ) {
+      (
+        context.metadata['dynamoEntityConfig'] as DynamoMetadataInterface
+      ).entityAttributes = {
+        [context.name]: config,
+      };
+    } else {
+      (
+        context.metadata['dynamoEntityConfig'] as DynamoMetadataInterface
+      ).entityAttributes = {
+        ...(context.metadata['dynamoEntityConfig'] as DynamoMetadataInterface)
+          .entityAttributes,
+        [context.name]: config,
+      };
+    }
   };
 }

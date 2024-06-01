@@ -6,7 +6,6 @@ export interface EntityConfig {
 
 export function Entity(config: EntityConfig) {
   return function (originalMethod: any, context: ClassDecoratorContext) {
-    // @ts-ignore
     if (!context.metadata['dynamoEntityConfig']) {
       context.metadata['dynamoEntityConfig'] = {};
     }
